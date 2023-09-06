@@ -11,5 +11,9 @@ metadata:
   namespace: finance-haim
 spec:
   containers:
-    - name: redis-container
+    - name: temp-bus
       image: redis:alpine
+
+
+
+and then: kubectl apply -f temp-bus-pod.yaml
