@@ -1,0 +1,59 @@
+*** pod yaml: (14a.yaml)
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-resolver
+spec:
+  containers:
+    - name: nginx-container
+      image: nginx
+
+
+*** create pod:
+kubectl apply -f nginx-resolver-pod.yaml
+
+
+*** create the service YAML: (14b.yaml)
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-resolver-service
+spec:
+  selector:
+    app: nginx-resolver  # Match pods with the label "app: nginx-resolver"
+  ports:
+    - protocol: TCP
+      port: 80            # Expose port 80 on the service
+      targetPort: 80      # Forward traffic to port 80 on the pods
+
+
+*** crete the service: (14b.yaml)
+kubectl apply -f nginx-resolver-service.yaml
+
+
+*** create dns-test-pod.yaml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dns-test-pod
+  namespace: default
+spec:
+  containers:
+    - name: busybox
+      image: busybox:1.28
+      command: [ "sh", "-c", "nslookup nginx-resolver-service > /root/nginx-haim.svc && nslookup nginx-resolver > /root/nginx-haim.pod && sleep 3600" ]
+  restartPolicy: Never
+
+*** create test pod:
+kubectl apply -f dns-test-pod.yaml
+
+
+*** view pods:
+kubectl get pods
+
+*** copy results:
+kubectl cp default/dns-test-pod:/root/nginx-haim.svc ./nginx-haim.svc
+kubectl cp default/dns-test-pod:/root/nginx-haim.pod ./nginx-haim.pod
