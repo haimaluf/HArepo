@@ -1,0 +1,17 @@
+*** pod yaml:
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multi-pod
+spec:
+  containers:
+    - name: alpha
+      image: nginx
+    - name: beta
+      image: busybox
+      command: ["sleep", "4800"]
+
+
+*** create it
+kubectl apply -f multi-pod.yaml
