@@ -1,0 +1,16 @@
+ssh to node01....
+
+*** pod yaml: (create in: /etc/kubernetes/manifests/nginx-critical.yaml)
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-critical
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+  restartPolicy: Always
+
+*** see pod:
+kubectl get pods
