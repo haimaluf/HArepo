@@ -1,0 +1,15 @@
+kubectl create namespace finance-haim
+kubectl create -f temp-bus-pod.yaml --namespace=finance-yourname
+
+
+
+or yaml:
+apiVersion: v1
+kind: Pod
+metadata:
+  name: temp-bus
+  namespace: finance-haim
+spec:
+  containers:
+    - name: redis-container
+      image: redis:alpine
