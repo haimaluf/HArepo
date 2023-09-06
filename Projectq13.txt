@@ -1,0 +1,45 @@
+
+*** original pod (q13.yaml)
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx:1.16
+
+
+*** create: 
+kubectl apply -f q13.yaml.yaml
+
+*** upgrade to 1.17 and add record option:
+kubectl set image deployment/nginx-deploy nginx-container=nginx:1.17 --record
+
+rollout outpout:
+
+ubuntu@ip-172-31-24-6:~/workarea/devopshift$ kubectl rollout history deployment/nginx-deploy --revision=1
+deployment.apps/nginx-deploy with revision #1
+Pod Template:
+  Labels:       app=nginx
+        pod-template-hash=57c5d8d6c7
+  Containers:
+   nginx-container:
+    Image:      nginx:1.16
+    Port:       <none>
+    Host Port:  <none>
+    Environment:        <none>
+    Mounts:     <none>
+  Volumes:      <none>
+
+
