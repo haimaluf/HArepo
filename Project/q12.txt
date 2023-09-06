@@ -1,0 +1,45 @@
+*** create PV: (12a.yaml)
+
+*** pv-1 yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-1
+spec:
+  capacity:
+    storage: 100Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /data
+
+*** crteate the PV:
+kubectl create -f 12b.yaml
+
+
+
+*** pod: (12b.yaml)
+
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: use-pv
+  name: use-pvspec-yourname
+spec:
+  volumes:
+    - name: pv-volume
+      persistentVolumeClaim:
+        claimName: pv-1-claim
+  containers:
+    - image: nginx
+      name: use-pv
+      volumeMounts:
+        - name: pv-volume
+          mountPath: /data
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+
+
+kubectl create -f 12b.yaml
