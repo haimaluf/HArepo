@@ -1,0 +1,71 @@
+*** create yaml:
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod-prod-1
+  labels:
+    env: prod
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod-prod-2
+  labels:
+    env: prod
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod-dev-1
+  labels:
+    env: dev
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod-dev-2
+  labels:
+    env: dev
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod-dev-3
+  labels:
+    env: dev
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx
+
+
+
+
+
+*** create pods:
+kubectl apply -f nginx-pods.yaml
