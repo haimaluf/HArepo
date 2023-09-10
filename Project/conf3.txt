@@ -1,0 +1,64 @@
+ubuntu@ip-172-31-29-0:~/workarea/devopshift$ kubectl run nginx --image=nginx --restart=Never --dry-run -o yaml > nginx-pod.yml
+W0910 17:20:10.938932  141558 helpers.go:663] --dry-run is deprecated and can be replaced with --dry-run=client.
+ubuntu@ip-172-31-29-0:~/workarea/devopshift$ cat nginx-pod.yml 
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  containers:
+  - image: nginx
+    name: nginx
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}
+
+
+
+*** new YAML: ***
+
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  containers:
+  - image: nginx
+    name: nginx
+    resources: {}
+    envFrom:  # <<<<<<<<<<<<<
+    - configMapRef:  # <<<<<<<<<<<<<<<<<<<
+        name: keyvalcfgmap  #  <<<<<<<<<<<<<<<<<
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}
+
+
+ubuntu@ip-172-31-29-0:~/workarea/devopshift$ kubectl exec -it nginx -- env
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOSTNAME=nginx
+NGINX_VERSION=1.25.2
+NJS_VERSION=0.8.0
+PKG_RELEASE=1~bookworm
+config.txt=key1=value1                  <<<<<<<<<<<<<<
+key2=value2                             <<<<<<<<<<<<<<
+
+KUBERNETES_PORT_443_TCP_ADDR=100.64.0.1
+KUBERNETES_SERVICE_HOST=100.64.0.1
+KUBERNETES_SERVICE_PORT=443
+KUBERNETES_SERVICE_PORT_HTTPS=443
+KUBERNETES_PORT=tcp://100.64.0.1:443
+KUBERNETES_PORT_443_TCP=tcp://100.64.0.1:443
+KUBERNETES_PORT_443_TCP_PROTO=tcp
+KUBERNETES_PORT_443_TCP_PORT=443
+TERM=xterm
+HOME=/root
+
+
