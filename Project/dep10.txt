@@ -1,0 +1,67 @@
+
+ubuntu@ip-172-31-29-0:~/workarea/devopshift$ kubectl set image deployment/webapp nginx=nginx:1.100
+deployment.apps/webapp image updated
+
+*** a:  
+ubuntu@ip-172-31-29-0:~/workarea/devopshift$ kubectl get po,deployment
+NAME                          READY   STATUS             RESTARTS   AGE
+pod/nginx-pod-dev-1           1/1     Running            0          107m
+pod/nginx-pod-dev-2           1/1     Running            0          107m
+pod/nginx-pod-dev-3           1/1     Running            0          107m
+pod/nginx-pod-prod-1          1/1     Running            0          107m
+pod/nginx-pod-prod-2          1/1     Running            0          107m
+pod/webapp-684ff84dd7-rlvs8   1/1     Running            0          100s
+pod/webapp-77b685f94f-drdsk   0/1     ImagePullBackOff   0          13s     <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+NAME                     READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/webapp   1/1     1            1           13m
+
+*** b:
+
+ubuntu@ip-172-31-29-0:~/workarea/devopshift$ kubectl rollout undo deployment/webapp
+deployment.apps/webapp rolled back
+ubuntu@ip-172-31-29-0:~/workarea/devopshift$ kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+nginx-pod-dev-1           1/1     Running   0          114m
+nginx-pod-dev-2           1/1     Running   0          114m
+nginx-pod-dev-3           1/1     Running   0          114m
+nginx-pod-prod-1          1/1     Running   0          114m
+nginx-pod-prod-2          1/1     Running   0          114m
+webapp-684ff84dd7-rlvs8   1/1     Running   0          7m55s
+
+
+*** c:
+ubuntu@ip-172-31-29-0:~/workarea/devopshift$ kubectl rollout undo deployment/webapp --to-revision=7
+error: unable to find specified revision 7 in history
+
+*** d:
+
+ubuntu@ip-172-31-29-0:~/workarea/devopshift$ kubectl rollout history deployment/webapp --revision=2
+deployment.apps/webapp with revision #2
+Pod Template:
+  Labels:       app=webapp
+        pod-template-hash=788f8c85b6
+  Containers:
+   nginx:
+    Image:      nginx:1.17.4
+    Port:       80/TCP
+    Host Port:  0/TCP
+    Environment:        <none>
+    Mounts:     <none>
+  Volumes:      <none>
+
+
+
+*** e:
+ubuntu@ip-172-31-29-0:~/workarea/devopshift$ kubectl get pods,deployment
+NAME                          READY   STATUS    RESTARTS   AGE
+pod/nginx                     0/1     Pending   0          66m
+pod/nginx-pod-dev-1           1/1     Running   0          117m
+pod/nginx-pod-dev-2           1/1     Running   0          117m
+pod/nginx-pod-dev-3           1/1     Running   0          117m
+pod/nginx-pod-prod-1          1/1     Running   0          117m
+pod/nginx-pod-prod-2          1/1     Running   0          117m
+pod/webapp-84bc478888-h5dz8   1/1     Running   0          24s
+
+NAME                     READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/webapp   1/1     1            1           23m
