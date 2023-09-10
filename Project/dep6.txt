@@ -1,0 +1,46 @@
+kubectl create deploy webapp --image=nginx:1.17.1 --dry-run -o yaml > webapp.yaml
+
+ubuntu@ip-172-31-29-0:~/workarea/devopshift$ cat webapp.yaml 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: webapp
+  name: webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - image: nginx:1.17.1
+        name: nginx
+        ports:
+        - containerPort: 80  # add port 80 <<<<
+        resources: {}
+status: {}
+
+
+
+ubuntu@ip-172-31-29-0:~/workarea/devopshift$ kubectl apply -f webapp.yaml 
+deployment.apps/webapp created
+ubuntu@ip-172-31-29-0:~/workarea/devopshift$ kubectl get deployment,po
+NAME                     READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/webapp   1/1     1            1           29s
+
+NAME                          READY   STATUS    RESTARTS   AGE
+pod/nginx                     0/1     Pending   0          44m
+pod/nginx-pod-dev-1           1/1     Running   0          95m
+pod/nginx-pod-dev-2           1/1     Running   0          95m
+pod/nginx-pod-dev-3           1/1     Running   0          95m
+pod/nginx-pod-prod-1          1/1     Running   0          95m
+pod/nginx-pod-prod-2          1/1     Running   0          95m
+pod/webapp-684ff84dd7-k89cv   1/1     Running   0          29s
