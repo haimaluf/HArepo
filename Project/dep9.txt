@@ -1,0 +1,38 @@
+ubuntu@ip-172-31-29-0:~/workarea/devopshift$ kubectl rollout undo deployment/webapp
+deployment.apps/webapp rolled back
+ubuntu@ip-172-31-29-0:~/workarea/devopshift$ kubectl describe deployment/webapp
+Name:                   webapp
+Namespace:              default
+CreationTimestamp:      Sun, 10 Sep 2023 16:27:59 +0000
+Labels:                 app=webapp
+Annotations:            deployment.kubernetes.io/revision: 3
+Selector:               app=webapp
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=webapp
+  Containers:
+   nginx:
+    Image:        nginx:1.17.1    <<<<<<<<<<<<<<<<<<<<<<
+    Port:         80/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   webapp-684ff84dd7 (1/1 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  11m    deployment-controller  Scaled up replica set webapp-684ff84dd7 to 1
+  Normal  ScalingReplicaSet  9m12s  deployment-controller  Scaled up replica set webapp-788f8c85b6 to 1
+  Normal  ScalingReplicaSet  9m6s   deployment-controller  Scaled down replica set webapp-684ff84dd7 to 0 from 1
+  Normal  ScalingReplicaSet  5s     deployment-controller  Scaled up replica set webapp-684ff84dd7 to 1 from 0
+  Normal  ScalingReplicaSet  4s     deployment-controller  Scaled down replica set webapp-788f8c85b6 to 0 from 1
