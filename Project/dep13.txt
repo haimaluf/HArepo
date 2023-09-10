@@ -1,0 +1,27 @@
+ubuntu@ip-172-31-29-0:~/workarea/devopshift$ kubectl delete all --all
+pod "nginx" deleted
+pod "nginx-pod-dev-1" deleted
+pod "nginx-pod-dev-2" deleted
+pod "nginx-pod-dev-3" deleted
+pod "nginx-pod-prod-1" deleted
+pod "nginx-pod-prod-2" deleted
+pod "webapp-84bc478888-6jszk" deleted
+pod "webapp-84bc478888-9qx9g" deleted
+pod "webapp-84bc478888-dqwkg" deleted
+pod "webapp-84bc478888-f26tk" deleted
+pod "webapp-84bc478888-glmdh" deleted
+pod "webapp-84bc478888-h5dz8" deleted
+pod "webapp-84bc478888-np46k" deleted
+pod "webapp-84bc478888-nrnxz" deleted
+pod "webapp-84bc478888-wgl6b" deleted
+pod "webapp-84bc478888-z6cw7" deleted
+service "kubernetes" deleted
+deployment.apps "webapp" deleted
+replicaset.apps "webapp-684ff84dd7" deleted
+horizontalpodautoscaler.autoscaling "webapp-hpa" deleted
+
+
+ubuntu@ip-172-31-29-0:~/workarea/devopshift$ 
+ubuntu@ip-172-31-29-0:~/workarea/devopshift$ 
+ubuntu@ip-172-31-29-0:~/workarea/devopshift$ kubectl get po,deployment,hpa
+No resources found in default namespace.
