@@ -1,0 +1,60 @@
+
+1:
+
+kubectl create deploy webapp --image=nginx --dry-run -o yaml > webapp.yaml
+
+
+*** ubuntu@ip-172-31-29-0:~/workarea/devopshift$ cat webapp.yaml 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: webapp
+  name: webapp
+spec:
+  replicas: 5  # change to 5 from 1  <<<<
+  selector:
+    matchLabels:
+      app: webapp
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+        resources: {}
+status: {}
+
+
+2:
+ubuntu@ip-172-31-29-0:~/workarea/devopshift$ kubectl get deployment,po
+NAME                     READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/webapp   5/5     5            5           87s
+
+NAME                          READY   STATUS    RESTARTS   AGE
+pod/nginx                     0/1     Pending   0          24m
+pod/nginx-pod-dev-1           1/1     Running   0          74m
+pod/nginx-pod-dev-2           1/1     Running   0          74m
+pod/nginx-pod-dev-3           1/1     Running   0          74m
+pod/nginx-pod-prod-1          1/1     Running   0          74m
+pod/nginx-pod-prod-2          1/1     Running   0          74m
+pod/webapp-6684ccd7b8-jpp4c   1/1     Running   0          45s
+pod/webapp-6684ccd7b8-rqnzg   1/1     Running   0          7s
+pod/webapp-6684ccd7b8-w8782   1/1     Running   0          7s
+pod/webapp-6684ccd7b8-wsdtq   1/1     Running   0          7s
+pod/webapp-6684ccd7b8-wzqfc   1/1     Running   0          7s
+ubuntu@ip-172-31-29-0:~/workarea/devopshift$ kubectl rollout status deployment/webapp
+deployment "webapp" successfully rolled out
+
+
+3:
+ubuntu@ip-172-31-29-0:~/workarea/devopshift$ kubectl get replicaset -l app=webapp
+NAME                DESIRED   CURRENT   READY   AGE
+webapp-6684ccd7b8   5         5         5       3m41s
+
+
