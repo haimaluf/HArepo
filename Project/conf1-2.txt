@@ -1,0 +1,46 @@
+cat >> config.txt << EOF
+key1=value1
+key2=value2
+EOF
+cat config.txt
+
+
+kubectl create configmap keyvalcfgmap --from-file=config.txt
+
+
+
+  ubuntu@ip-172-31-29-0:~/workarea/devopshift$ kubectl describe configmap keyvalcfgmap
+Name:         keyvalcfgmap
+Namespace:    default
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+config.txt:
+----
+key1=value1
+key2=value2
+
+
+BinaryData
+====
+
+Events:  <none>
+
+  
+  *****  VERIFY:  *****
+
+  ubuntu@ip-172-31-29-0:~/workarea/devopshift$ kubectl get configmap keyvalcfgmap -o yaml
+apiVersion: v1
+data:
+  config.txt: |
+    key1=value1
+    key2=value2
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2023-09-10T17:16:09Z"
+  name: keyvalcfgmap
+  namespace: default
+  resourceVersion: "28365"
+  uid: 22e6fddf-160a-4d27-a862-70d88fe284fa
