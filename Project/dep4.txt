@@ -1,0 +1,653 @@
+*******  replicaset yaml:  *******
+  ubuntu@ip-172-31-29-0:~/workarea/devopshift$ kubectl get deployment webapp  -o yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"creationTimestamp":null,"labels":{"app":"webapp"},"name":"webapp","namespace":"default"},"spec":{"replicas":5,"selector":{"matchLabels":{"app":"webapp"}},"strategy":{},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"webapp"}},"spec":{"containers":[{"image":"nginx","name":"nginx","resources":{}}]}}},"status":{}}
+  creationTimestamp: "2023-09-10T16:06:47Z"
+  generation: 2
+  labels:
+    app: webapp
+  name: webapp
+  namespace: default
+  resourceVersion: "16879"
+  uid: 3afc5843-2028-48a5-aa9d-a8536e79e4d9
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 5
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: webapp
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - image: nginx
+        imagePullPolicy: Always
+        name: nginx
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 5
+  conditions:
+  - lastTransitionTime: "2023-09-10T16:06:47Z"
+    lastUpdateTime: "2023-09-10T16:06:49Z"
+    message: ReplicaSet "webapp-6684ccd7b8" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2023-09-10T16:08:10Z"
+    lastUpdateTime: "2023-09-10T16:08:10Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 2
+  readyReplicas: 5
+  replicas: 5
+  updatedReplicas: 5
+
+
+
+***** pods Yaml *****
+
+
+ubuntu@ip-172-31-29-0:~/workarea/devopshift$ kubectl get pods -l app=webapp  -o yaml
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      cni.projectcalico.org/containerID: ed5c4862fca553c082bc0e5404bd482f1a5edd6b53c48bcb3c326eb3b3345b15
+      cni.projectcalico.org/podIP: 100.121.179.11/32
+      cni.projectcalico.org/podIPs: 100.121.179.11/32
+      kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu request for container
+        nginx'
+    creationTimestamp: "2023-09-10T16:07:29Z"
+    generateName: webapp-6684ccd7b8-
+    labels:
+      app: webapp
+      pod-template-hash: 6684ccd7b8
+    name: webapp-6684ccd7b8-jpp4c
+    namespace: default
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: webapp-6684ccd7b8
+      uid: 18c68a7c-29c1-4f57-a9cd-e7cb6886d9bd
+    resourceVersion: "16725"
+    uid: a98cb79c-3d3c-4063-8271-f265db5cfad7
+  spec:
+    containers:
+    - image: nginx
+      imagePullPolicy: Always
+      name: nginx
+      resources:
+        requests:
+          cpu: 100m
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-db8js
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: i-0f8555ead4c8ef1d2
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-db8js
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2023-09-10T16:07:29Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2023-09-10T16:07:31Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2023-09-10T16:07:31Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2023-09-10T16:07:29Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://0201ebdf06365e048132cd974a910169411fcf0ef02a315491c09406e02f9c0b
+      image: docker.io/library/nginx:latest
+      imageID: docker.io/library/nginx@sha256:6926dd802f40e5e7257fded83e0d8030039642e4e10c4a98a6478e9c6fe06153
+      lastState: {}
+      name: nginx
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2023-09-10T16:07:31Z"
+    hostIP: 172.31.20.151
+    phase: Running
+    podIP: 100.121.179.11
+    podIPs:
+    - ip: 100.121.179.11
+    qosClass: Burstable
+    startTime: "2023-09-10T16:07:29Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      cni.projectcalico.org/containerID: 3e0a6a47db6b73a2c2c87ecdd9aea65cd4bfb7b9ebe293d096423a82521194dd
+      cni.projectcalico.org/podIP: 100.121.179.12/32
+      cni.projectcalico.org/podIPs: 100.121.179.12/32
+      kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu request for container
+        nginx'
+    creationTimestamp: "2023-09-10T16:08:07Z"
+    generateName: webapp-6684ccd7b8-
+    labels:
+      app: webapp
+      pod-template-hash: 6684ccd7b8
+    name: webapp-6684ccd7b8-rqnzg
+    namespace: default
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: webapp-6684ccd7b8
+      uid: 18c68a7c-29c1-4f57-a9cd-e7cb6886d9bd
+    resourceVersion: "16860"
+    uid: e580bead-f1d1-4b26-81cb-5ea2a91ef3fc
+  spec:
+    containers:
+    - image: nginx
+      imagePullPolicy: Always
+      name: nginx
+      resources:
+        requests:
+          cpu: 100m
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-bnzrf
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: i-0f8555ead4c8ef1d2
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-bnzrf
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2023-09-10T16:08:07Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2023-09-10T16:08:09Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2023-09-10T16:08:09Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2023-09-10T16:08:07Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://8a65e6c56322ac26a0b26ca22744da5b32c42a402b5579a1bd19343b9c61464a
+      image: docker.io/library/nginx:latest
+      imageID: docker.io/library/nginx@sha256:6926dd802f40e5e7257fded83e0d8030039642e4e10c4a98a6478e9c6fe06153
+      lastState: {}
+      name: nginx
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2023-09-10T16:08:09Z"
+    hostIP: 172.31.20.151
+    phase: Running
+    podIP: 100.121.179.12
+    podIPs:
+    - ip: 100.121.179.12
+    qosClass: Burstable
+    startTime: "2023-09-10T16:08:07Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      cni.projectcalico.org/containerID: b41e406111d1154dd3d3c238ffd8fb435ee4f107ab931ba648b583289f88a5be
+      cni.projectcalico.org/podIP: 100.121.179.13/32
+      cni.projectcalico.org/podIPs: 100.121.179.13/32
+      kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu request for container
+        nginx'
+    creationTimestamp: "2023-09-10T16:08:07Z"
+    generateName: webapp-6684ccd7b8-
+    labels:
+      app: webapp
+      pod-template-hash: 6684ccd7b8
+    name: webapp-6684ccd7b8-w8782
+    namespace: default
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: webapp-6684ccd7b8
+      uid: 18c68a7c-29c1-4f57-a9cd-e7cb6886d9bd
+    resourceVersion: "16870"
+    uid: c813b417-1f9c-4a10-94ff-944e9f55be0e
+  spec:
+    containers:
+    - image: nginx
+      imagePullPolicy: Always
+      name: nginx
+      resources:
+        requests:
+          cpu: 100m
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-5vzjs
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: i-0f8555ead4c8ef1d2
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-5vzjs
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2023-09-10T16:08:07Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2023-09-10T16:08:10Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2023-09-10T16:08:10Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2023-09-10T16:08:07Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://c61e61dcf9fee9c4d58340a9509b06f2d5d1598f9009192a395ec664f24ce35a
+      image: docker.io/library/nginx:latest
+      imageID: docker.io/library/nginx@sha256:6926dd802f40e5e7257fded83e0d8030039642e4e10c4a98a6478e9c6fe06153
+      lastState: {}
+      name: nginx
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2023-09-10T16:08:10Z"
+    hostIP: 172.31.20.151
+    phase: Running
+    podIP: 100.121.179.13
+    podIPs:
+    - ip: 100.121.179.13
+    qosClass: Burstable
+    startTime: "2023-09-10T16:08:07Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      cni.projectcalico.org/containerID: 13e27024650d6f610a36a9bf12f29a89af6172e8bafa03dd64e8e6d217a2c598
+      cni.projectcalico.org/podIP: 100.121.179.15/32
+      cni.projectcalico.org/podIPs: 100.121.179.15/32
+      kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu request for container
+        nginx'
+    creationTimestamp: "2023-09-10T16:08:07Z"
+    generateName: webapp-6684ccd7b8-
+    labels:
+      app: webapp
+      pod-template-hash: 6684ccd7b8
+    name: webapp-6684ccd7b8-wsdtq
+    namespace: default
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: webapp-6684ccd7b8
+      uid: 18c68a7c-29c1-4f57-a9cd-e7cb6886d9bd
+    resourceVersion: "16876"
+    uid: 539ba37e-61cc-4559-9d51-193c8d526979
+  spec:
+    containers:
+    - image: nginx
+      imagePullPolicy: Always
+      name: nginx
+      resources:
+        requests:
+          cpu: 100m
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-llvj2
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: i-0f8555ead4c8ef1d2
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-llvj2
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2023-09-10T16:08:07Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2023-09-10T16:08:11Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2023-09-10T16:08:11Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2023-09-10T16:08:07Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://52c6907deb10c53930497f91df047a501512a6fcb678e05d50e7e7822c1d9f50
+      image: docker.io/library/nginx:latest
+      imageID: docker.io/library/nginx@sha256:6926dd802f40e5e7257fded83e0d8030039642e4e10c4a98a6478e9c6fe06153
+      lastState: {}
+      name: nginx
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2023-09-10T16:08:11Z"
+    hostIP: 172.31.20.151
+    phase: Running
+    podIP: 100.121.179.15
+    podIPs:
+    - ip: 100.121.179.15
+    qosClass: Burstable
+    startTime: "2023-09-10T16:08:07Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      cni.projectcalico.org/containerID: d3ff5115ad2ca3572d4ff15c62f07f6ee24fb99b82b783fe27f684ad4f0cbfcd
+      cni.projectcalico.org/podIP: 100.121.179.14/32
+      cni.projectcalico.org/podIPs: 100.121.179.14/32
+      kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu request for container
+        nginx'
+    creationTimestamp: "2023-09-10T16:08:07Z"
+    generateName: webapp-6684ccd7b8-
+    labels:
+      app: webapp
+      pod-template-hash: 6684ccd7b8
+    name: webapp-6684ccd7b8-wzqfc
+    namespace: default
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: webapp-6684ccd7b8
+      uid: 18c68a7c-29c1-4f57-a9cd-e7cb6886d9bd
+    resourceVersion: "16868"
+    uid: 8db7838f-1953-4b14-ac4b-0bb48e3c6e2f
+  spec:
+    containers:
+    - image: nginx
+      imagePullPolicy: Always
+      name: nginx
+      resources:
+        requests:
+          cpu: 100m
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-dvdds
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: i-0f8555ead4c8ef1d2
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-dvdds
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2023-09-10T16:08:07Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2023-09-10T16:08:10Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2023-09-10T16:08:10Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2023-09-10T16:08:07Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://81c5d0a6165d817d0af13788da3f7d75a9ab70cbf05a7ae645e14307279bb35e
+      image: docker.io/library/nginx:latest
+      imageID: docker.io/library/nginx@sha256:6926dd802f40e5e7257fded83e0d8030039642e4e10c4a98a6478e9c6fe06153
+      lastState: {}
+      name: nginx
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2023-09-10T16:08:09Z"
+    hostIP: 172.31.20.151
+    phase: Running
+    podIP: 100.121.179.14
+    podIPs:
+    - ip: 100.121.179.14
+    qosClass: Burstable
+    startTime: "2023-09-10T16:08:07Z"
+kind: List
+metadata:
+  resourceVersion: ""
