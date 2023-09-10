@@ -1,0 +1,4 @@
+ubuntu@ip-172-31-29-0:~/workarea/devopshift$ kubectl delete deployment webapp
+deployment.apps "webapp" deleted
+ubuntu@ip-172-31-29-0:~/workarea/devopshift$ kubectl get pods -l app=webapp  
+No resources found in default namespace.
