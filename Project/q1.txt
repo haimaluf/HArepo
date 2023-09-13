@@ -1,4 +1,4 @@
-*** Cםצצשמג
+*** Command
 
 kubectl create -f q1.yaml
 
