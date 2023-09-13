@@ -1,10 +1,17 @@
 4. kubectl get pods -l env=dev 
+
 5. kubectl get pods -l env=dev --show-labels
+
 6. kubectl get pods -l env=prod
+
 7. kubectl get pods -l env=dev --show-labels
-8.
+
+8. kubectl get pods -l env   or kubectl get pods -l env=<label_value>
+
 9. kubectl get pods -l 'env in (dev,prod)'
+
 10. kubectl get pods -l 'env in (dev,prod)' --show-labels
+
 11: 
 ubuntu@ip-172-31-29-0:~/workarea/devopshift$ kubectl get po
 NAME               READY   STATUS    RESTARTS   AGE
@@ -64,6 +71,7 @@ nginx-pod-prod-2   1/1     Running   0          17m   app=nginx
 
 
 14: kubectl get nodes --show-labels
+
 15: kubectl label node i-0f8555ead4c8ef1d2 nodeName=nginxnode1
 
 16: (nodeselect.yaml)
