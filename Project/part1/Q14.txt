@@ -25,8 +25,8 @@ spec:
     app: nginx-resolver  # Match pods with the label "app: nginx-resolver"
   ports:
     - protocol: TCP
-      port: 80            # Expose port 80 on the service
-      targetPort: 80      # Forward traffic to port 80 on the pods
+      port: 80            
+      targetPort: 80      
 
 
 *** crete the service: (14b.yaml)
