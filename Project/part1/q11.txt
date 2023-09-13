@@ -3,7 +3,7 @@ yaml:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: redis-storage-yourname
+  name: redis-storage-haima
 spec:
   containers:
     - name: redis-container
