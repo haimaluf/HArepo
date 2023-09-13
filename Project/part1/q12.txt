@@ -26,7 +26,7 @@ metadata:
   creationTimestamp: null
   labels:
     run: use-pv
-  name: use-pvspec-yourname
+  name: use-pvspec-haima
 spec:
   volumes:
     - name: pv-volume
